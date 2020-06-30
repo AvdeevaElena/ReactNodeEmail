@@ -25,7 +25,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post ('/contact', (req, res) => {
   nodemailer.createTestAccount ((err, account) =>{
-    
+   
+    /*
+    let  transporter= nodemailer.createTransport ({
+      host: 'smtp.gmail.com',
+      port: 465,
+      auth: {
+        user: 'avdeevaelena5@gmail.com', 
+        pass: '*********', 
+      },
+    });  
+   
+
     let  transporter= nodemailer.createTransport ({
       host: "smtp.ethereal.email",
       port: 587,
@@ -33,7 +44,23 @@ app.post ('/contact', (req, res) => {
         user: 'kiley.kerluke97@ethereal.email', 
         pass: '74rN9eWSYRBfQVP5t1', 
       },
-    });
+    });   */
+   
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        type: 'OAuth2',
+        user: 'avdeevaelena5@gmail.com',
+        clientId: '853******.apps.googleusercontent.com',
+              clientSecret: 'iGOo*********K',
+              refreshToken: '1//04A******-L9I**',
+              accessToken: 'ya2**********'
+    }
+});
+
+   /*   Если использовать, как сервер для рассылки ( "Исходящие")
     let mailOptions = {
       from: req.body.name, 
       to: req.body.email,   
@@ -41,7 +68,15 @@ app.post ('/contact', (req, res) => {
       text:  req.body.message,
       html:  "<b>"+req.body.message+ "</b>"
       
+    }  */
+
+    let mailOptions = {
+      from: req.body.name, 
+      to: 'avdeevaelena5@gmail.com',   
+      subject: "Hello ✔ from " + req.body.name, 
+      text:  req.body.message + " send  from email " + req.body.email 
     } 
+    
     transporter.sendMail (mailOptions, (err, info) => {
       if (err) {
         return console.log (err)
@@ -56,13 +91,3 @@ app.post ('/contact', (req, res) => {
 app.listen(PORT, () =>console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`));  
 } 
 
-
-/*   
-"<h3>ContactDetailis </h3>
-      <ul> 
-        <li>Name: ${req.body.name} </li>
-        <li>Email: ${req.body.email} </li>
-      </ul>
-    <h3>Message </h3> "
-
-*/
